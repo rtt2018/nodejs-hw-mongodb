@@ -25,6 +25,14 @@ export const startServer = () => {
         });
     });
 
+    app.get('/students', async (req, res) => {
+        const students = await getAllStudents();
+        res.json({
+            status: 201,
+            message: 'Successfully found contacts!',
+            data: students
+        });
+    });
 
     app.get('/students/:id', async (req, res) => {
         const studentId = req.params.id;
@@ -32,31 +40,21 @@ export const startServer = () => {
 
         if (!student) {
             res.status(404).json({
-                message: 'Student not found'
+                message: 'Contact not found'
             });
             return;
         }
         res.json({
             status: 200,
-            message: `Student with ID ${studentId}`,
+            message: `Successfully found contact with id ${studentId}!`,
             data: student,
-        });
-    });
-
-
-    app.get('/students', async (req, res) => {
-        const students = await getAllStudents();
-        res.json({
-            status: 201,
-            message: 'Student created successfully',
-            data: students
         });
     });
 
     app.get((req, res) => {
         res.status(404).json({
             status: 404,
-            message: 'Not Found',
+            message: 'Not found',
         });
     });
 

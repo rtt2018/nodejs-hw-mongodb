@@ -2,71 +2,71 @@ import express from 'express';
 import cors from 'cors';
 import { getEnvVar } from './utils/getEnvVar.js';
 import pino from 'pino-http';
-import { contacts } from './db/db.js';
+import { getStudentById, getAllStudents } from './services/students.js';
 
-const PORT = getEnvVar("PORT", 3000);
-console.log("🚀 ~ PORT:", PORT);
 
-const app = express();
-app.use(cors());
-app.use(
-    pino({
-        transport: {
-            target: 'pino-pretty',
-        },
-    }),
-);
+export const startServer = () => {
 
-app.get('/', (req, res) => {
-    res.json({
-        message: 'Hello world!',
+    const PORT = getEnvVar("PORT", 3000);
+
+    const app = express();
+    app.use(cors());
+    app.use(
+        pino({
+            transport: {
+                target: 'pino-pretty',
+            },
+        }),
+    );
+
+    app.get('/', (req, res) => {
+        res.json({
+            message: 'Hello world!',
+        });
     });
-});
 
-app.listen(PORT, () => {
-    console.log(`Server is running on ${PORT}`);
-});
 
-app.get('/students', (req, res) => {
-    res.json({
-        status: 200,
-        message: 'Students list',
-        data: [
-            { name: 'John Doe', age: 20 },
-            { name: 'Jane Smith', age: 22 },
-        ],
+    app.get('/students/:id', async (req, res) => {
+        const studentId = req.params.id;
+        const student = await getStudentById(studentId);
+        if (!student) {
+            res.status(404).json({
+                message: 'Student not found'
+            });
+            return;
+        }
+        res.json({
+            status: 200,
+            message: `Student with ID ${studentId}`,
+            data: student,
+        });
     });
-});
 
 
-app.get('/students/:id', (req, res) => {
-    const studentId = req.params.id;
-    res.json({
-        status: 200,
-        message: `Student with ID ${studentId}`,
-        data: { name: 'John Doe', age: 20 },
+    app.get('/students', async (req, res) => {
+        const students = await getAllStudents();
+        res.json({
+            status: 201,
+            message: 'Student created successfully',
+            data: students
+        });
     });
-});
 
-
-app.post('/students', (req, res) => {
-    res.status(201).json({
-        status: 201,
-        message: 'Student created successfully',
-        data: contacts
+    app.get((req, res) => {
+        res.status(404).json({
+            status: 404,
+            message: 'Not Found',
+        });
     });
-});
 
-app.get('*', (req, res) => {
-    res.status(404).json({
-        status: 404,
-        message: 'Not Found',
+    app.use((err, req, res, next) => {
+        res.status(500).json({
+            message: 'Something went wrong',
+            error: err.message,
+        });
     });
-});
 
-app.use((err, req, res, next) => {
-    res.status(500).json({
-        message: 'Something went wrong',
-        error: err.message,
+    app.listen(PORT, () => {
+        console.log(`Server is running on ${PORT}`);
     });
-});
+};

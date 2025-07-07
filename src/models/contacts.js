@@ -30,4 +30,4 @@ const contactSchema = new Schema(
     },
 );
 
-export const Contacts = model('contacts', contactSchema);
+export const ContactsModel = model('contacts', contactSchema);

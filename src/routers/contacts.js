@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllContactsController, getContactsByIdController, pingController } from "../controllers/contacts";
+import { getAllContactsController, getContactsByIdController, pingController } from "../controllers/contacts.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import { createStudentController, deleteStudentController, updateStudentController, replaceStudentController } from "../controllers/contacts.js";
 

@@ -33,10 +33,14 @@ export const getContactsByIdController = async (req, res) => {
 };
 
 export const createContactController = async (req, res) => {
+
+    if (!req.bodyname || !req.body.phoneNumber || !req.body.contactType) {
+        throw createHttpError(400, 'Missing contact name, phone number, or contact type');
+    }
     const newContact = await createContact(req.body);
     res.status(201).json({
         status: 201,
-        message: 'Successfully created contact!',
+        message: 'Successfully created a contact!',
         data: newContact,
     });
 };
@@ -49,8 +53,8 @@ export const deleteContactController = async (req, res) => {
         throw createHttpError(404, 'Contact not found');
     }
 
-    res.status(200).json({
-        status: 200,
+    res.status(204).json({
+        status: 204,
         message: `Successfully deleted contact with id ${contactId}!`,
         data: deletedContact,
     });

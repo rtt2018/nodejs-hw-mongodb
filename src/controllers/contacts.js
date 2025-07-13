@@ -34,7 +34,7 @@ export const getContactsByIdController = async (req, res) => {
 
 export const createContactController = async (req, res) => {
 
-    if (!req.bodyname || !req.body.phoneNumber || !req.body.contactType) {
+    if (!req.body.name || !req.body.phoneNumber || !req.body.contactType) {
         throw createHttpError(400, 'Missing contact name, phone number, or contact type');
     }
     const newContact = await createContact(req.body);

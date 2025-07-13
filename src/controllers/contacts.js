@@ -1,4 +1,4 @@
-import { getContactsById, getAllContacts, createContact, deleteContact, updateContact, replaceContact } from './services/contacts.js';
+import { getContactsById, getAllContacts, createContact, deleteContact, updateContact, replaceContact } from '../services/contacts.js';
 import createHttpError from 'http-errors';
 
 

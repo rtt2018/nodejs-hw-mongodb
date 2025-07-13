@@ -22,6 +22,8 @@ export const startServer = () => {
         }),
     );
 
+    app.use(express.json());
+
     app.use(router);
 
     app.use(notFoundHandler);

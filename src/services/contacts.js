@@ -1,8 +1,17 @@
 import { Contacts } from '../models/contacts.js';
+import { SORT_ORDER } from "../constants/index.js";
 
-export const getAllContacts = async () => {
-    const contacts = await Contacts.find();
-    return contacts;
+export const getAllContacts = async ({
+    page = 1,
+    perPage = 10,
+    sortOrder = SORT_ORDER.ASC,
+    sortBy = '_id',
+}) => {
+    const limit = perPage;
+    const skip = page > 0 ? (page - 1) * perPage : 0;
+
+    const contactsQuery = Contacts.find();
+    return contactsQuery.skip(skip).limit(limit).sort({ [sortBy]: sortOrder }).exec();
 };
 
 export const getContactsById = async (contactId) => {

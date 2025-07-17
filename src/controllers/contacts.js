@@ -1,7 +1,7 @@
 import { getContactsById, getAllContacts, createContact, deleteContact, updateContact, replaceContact } from '../services/contacts.js';
 import createHttpError from 'http-errors';
-import { parsePaginationParams, parseSortParams } from '../utils/parsePaginationParams.js';
-
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
 
 export const pingController = (req, res) => {
     res.json({

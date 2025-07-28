@@ -1,26 +1,27 @@
 import { Router } from "express";
-import { getAllContactsController, getContactsByIdController, pingController } from "../controllers/contacts.js";
+import { getAllContactsController, getContactsByIdController, createContactController, deleteContactController, updateContactController, replaceContactController } from "../controllers/contacts.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
-import { createContactController, deleteContactController, updateContactController, replaceContactController } from "../controllers/contacts.js";
 import { isValidId } from "../middlewares/isValidId.js";
 import { validateBody } from "../middlewares/validateBody.js";
 import { createContactSchema, updateContactSchema } from '../validation/contacts.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 
+const contactsRouter = Router();
 
-const router = Router();
+contactsRouter.use(authenticate);
 
-router.get('/', ctrlWrapper(pingController));
-router.get('/contacts', ctrlWrapper(getAllContactsController));
-router.get('/contacts/:id', isValidId, ctrlWrapper(getContactsByIdController));
+contactsRouter.get('/', ctrlWrapper(getAllContactsController));
 
-router.post('/contacts', validateBody(createContactSchema), ctrlWrapper(createContactController));
+contactsRouter.get('/:id', isValidId, ctrlWrapper(getContactsByIdController));
 
-router.delete('/contacts/:id', isValidId, ctrlWrapper(deleteContactController));
+contactsRouter.post('/', validateBody(createContactSchema), ctrlWrapper(createContactController));
 
-router.patch('/contacts/:id', isValidId, validateBody(updateContactSchema), ctrlWrapper(updateContactController));
+contactsRouter.delete('/:id', isValidId, ctrlWrapper(deleteContactController));
 
-router.put('/contacts/:id', isValidId, validateBody(createContactSchema), ctrlWrapper(replaceContactController));
+contactsRouter.patch('/:id', isValidId, validateBody(updateContactSchema), ctrlWrapper(updateContactController));
+
+contactsRouter.put('/:id', isValidId, validateBody(createContactSchema), ctrlWrapper(replaceContactController));
 
 
-export default router;
+export default contactsRouter;

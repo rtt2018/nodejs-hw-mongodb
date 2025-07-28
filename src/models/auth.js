@@ -15,16 +15,17 @@ export const userShema = new Schema(
             type: String,
             required: true,
         },
-
+    },
+    {
         timestamps: true,
         versionKey: false,
+    }
+);
 
-    });
-
-User.methods.toJSON = function () {
+userShema.methods.toJSON = function () {
     const user = this.toObject();
     delete user.password;
     return user;
 };
 
-export const User = model('User', userShema);   
+export const Users = model('users', userShema);   

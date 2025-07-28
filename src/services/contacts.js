@@ -48,7 +48,7 @@ export function deleteContact(contactId, userId) {
 }
 
 export function updateContact(contactId, payload, userId) {
-    return Contacts.findByIdAndUpdate({ _id: contactId, userId }, payload, { new: true });
+    return Contacts.findOneAndUpdate({ _id: contactId, userId }, payload, { new: true });
 }
 
 export async function replaceContact(contactId, payload, userId) {

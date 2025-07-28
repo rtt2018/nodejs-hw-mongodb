@@ -1,18 +1,18 @@
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
-import { Users } from "../models/auth.js";
+import { User } from "../models/auth.js";
 import { Session } from "../models/session.js";
 import crypto from "node:crypto";
-import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/index.js';
+import { FIFTEEN_MINUTES, ONE_MONTH } from '../constants/index.js';
 
 export async function registerUser(payload) {
-    const user = await Users.findOne({ email: payload.email });
+    const user = await User.findOne({ email: payload.email });
     if (user) {
-        throw new createHttpError.Conflict('Email is already in use');
+        throw new createHttpError.Conflict('Email in use');
     }
     const hashedPassword = await bcrypt.hash(payload.password, 10);
     payload.password = hashedPassword;
-    return Users.create(payload);
+    return User.create(payload);
 }
 
 const createSession = () => {
@@ -21,12 +21,12 @@ const createSession = () => {
         accessToken: crypto.randomBytes(32).toString('base64'),
         refreshToken: crypto.randomBytes(32).toString('base64'),
         accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
-        refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
+        refreshTokenValidUntil: new Date(Date.now() + ONE_MONTH),
     };
 };
 
 export async function loginUser(email, password) {
-    const user = await Users.findOne({ email });
+    const user = await User.findOne({ email });
 
     if (!user) {
         throw new createHttpError.Unauthorized('Email or password is incorrect');
@@ -38,18 +38,18 @@ export async function loginUser(email, password) {
         throw new createHttpError.Unauthorized('Email or password is incorrect');
     }
 
-    await Session.deleteOne({ userId: user.id });
+    await Session.deleteOne({ userId: user._id });
 
     const session = createSession();
 
     return Session.create({
-        userId: user.id,
+        userId: user._id,
         ...session,
     });
 }
 
 export async function logoutUser(sessionId) {
-    await Session.deleteOne({ id: sessionId });
+    await Session.deleteOne({ _id: sessionId });
 }
 
 export async function refreshUserSession(sessionId, refreshToken) {
@@ -69,7 +69,7 @@ export async function refreshUserSession(sessionId, refreshToken) {
 
     const newSession = createSession();
 
-    await Session.deleteOne({ id: session.id });
+    await Session.deleteOne({ _id: session._id });
 
     return Session.create({
         userId: session.userId,

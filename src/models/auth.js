@@ -28,4 +28,4 @@ userShema.methods.toJSON = function () {
     return user;
 };
 
-export const Users = model('users', userShema);   
+export const User = model('users', userShema);   

@@ -1,5 +1,5 @@
 // import createHttpError from 'http-errors';
-import { registerUser, loginUser, logoutUser, refreshUserSession } from '../services/auth.js';
+import { registerUser, loginUser, logoutUser, refreshUserSession, requestPasswordReset, resetPassword } from '../services/auth.js';
 import { ONE_MONTH } from '../constants/index.js';
 
 const setupSession = (res, session) => {
@@ -47,7 +47,10 @@ export async function logoutUserController(req, res) {
     res.clearCookie('sessionId');
     res.clearCookie('refreshToken');
 
-    res.status(204).send();
+    res.json({
+        status: 204,
+        message: 'Successfully logged out',
+    });
 }
 
 export async function refreshUserController(req, res) {
@@ -65,3 +68,27 @@ export async function refreshUserController(req, res) {
         },
     });
 }
+
+export async function requestPasswordResetController(req, res) {
+    await requestPasswordReset(req.body.email);
+
+    res.json({
+        status: 200,
+        message: 'Message sent successfully',
+        data: {
+            email: req.body.email,
+        },
+    });
+};
+
+export async function resetPasswordController(req, res) {
+    const { token, password } = req.body;
+
+    await resetPassword(token, password);
+
+    res.json({
+        status: 200,
+        message: 'Password has been successfully reset.',
+        data: {},
+    });
+};

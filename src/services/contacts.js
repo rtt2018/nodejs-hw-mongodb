@@ -6,11 +6,12 @@ export const getAllContacts = async ({
     perPage = 10,
     sortOrder = SORT_ORDER.ASC,
     sortBy = '_id',
+    userId
 }) => {
     const limit = perPage;
     const skip = page > 0 ? (page - 1) * perPage : 0;
 
-    const contactsQuery = Contacts.find();
+    const contactsQuery = Contacts.find({ userId });
 
     const [total, contacts] = await Promise.all([
         Contacts.find().merge(contactsQuery).countDocuments(),

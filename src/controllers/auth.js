@@ -75,9 +75,7 @@ export async function requestPasswordResetController(req, res) {
     res.json({
         status: 200,
         message: 'Message sent successfully',
-        data: {
-            email: req.body.email,
-        },
+        data: {},
     });
 };
 

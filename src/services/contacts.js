@@ -40,8 +40,8 @@ export const getContactsById = async (contactId, userId) => {
     return contact;
 };
 
-export function createContact(payload, userId) {
-    return Contacts.create({ ...payload, userId });
+export function createContact(payload) {
+    return Contacts.create(payload);
 }
 
 export function deleteContact(contactId, userId) {

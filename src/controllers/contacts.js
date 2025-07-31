@@ -2,6 +2,12 @@ import { getContactsById, getAllContacts, createContact, deleteContact, updateCo
 import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { uploadToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { UPLOAD_TO_CLOUDINARY } from '../constants/index.js';
+
 
 export const pingController = (req, res) => {
     res.json({
@@ -47,7 +53,21 @@ export const getContactsByIdController = async (req, res) => {
 
 export const createContactController = async (req, res) => {
 
-    const newContact = await createContact(req.body, req.user._id);
+    let photo = null;
+
+    if (UPLOAD_TO_CLOUDINARY) {
+        const result = await uploadToCloudinary(req.file.path);
+        await fs.unlink(req.file.path);
+        photo = result.secure_url;
+    } else {
+        await fs.rename(
+            req.file.path,
+            path.resolve('src/uploads/photo', req.file.filename),
+        );
+        photo = `${getEnvVar('APP_DOMAIN')}/photo/${req.file.filename}`;
+    }
+
+    const newContact = await createContact({ ...req.body, photo, userId: req.user._id });
 
     res.status(201).json({
         status: 201,

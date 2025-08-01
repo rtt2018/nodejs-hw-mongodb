@@ -20,4 +20,4 @@ export const CLOUDINARY = {
     API_SECRET: getEnvVar('CLOUDINARY_API_SECRET'),
 };
 
-export const UPLOAD_TO_CLOUDINARY = getEnvVar('UPLOAD_TO_CLOUDINARY', 'false').toLowerCase() === 'true';
+export const UPLOAD_TO_CLOUDINARY = getEnvVar('UPLOAD_TO_CLOUDINARY').toLowerCase() === 'true';

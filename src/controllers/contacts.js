@@ -2,11 +2,7 @@ import { getContactsById, getAllContacts, createContact, deleteContact, updateCo
 import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
-import { getEnvVar } from '../utils/getEnvVar.js';
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import { uploadToCloudinary } from '../utils/saveFileToCloudinary.js';
-import { UPLOAD_TO_CLOUDINARY } from '../constants/index.js';
+import { savePhoto } from '../utils/savePhoto.js';
 
 
 export const pingController = (req, res) => {
@@ -53,19 +49,7 @@ export const getContactsByIdController = async (req, res) => {
 
 export const createContactController = async (req, res) => {
 
-    let photo = null;
-
-    if (UPLOAD_TO_CLOUDINARY) {
-        const result = await uploadToCloudinary(req.file.path);
-        await fs.unlink(req.file.path);
-        photo = result.secure_url;
-    } else {
-        await fs.rename(
-            req.file.path,
-            path.resolve('src/uploads/photo', req.file.filename),
-        );
-        photo = `${getEnvVar('APP_DOMAIN')}/photo/${req.file.filename}`;
-    }
+    const photo = await savePhoto(req);
 
     const newContact = await createContact({ ...req.body, photo, userId: req.user._id });
 
@@ -93,20 +77,7 @@ export const deleteContactController = async (req, res) => {
 
 export const updateContactController = async (req, res) => {
 
-    let photo = null;
-
-    if (UPLOAD_TO_CLOUDINARY) {
-        const result = await uploadToCloudinary(req.file.path);
-        await fs.unlink(req.file.path);
-        photo = result.secure_url;
-    } else {
-        await fs.rename(
-            req.file.path,
-            path.resolve('src/uploads/photo', req.file.filename),
-        );
-        photo = `${getEnvVar('APP_DOMAIN')}/photo/${req.file.filename}`;
-    }
-
+    const photo = await savePhoto(req);
 
     const updatedContact = await updateContact(req.params.id, req.user._id, { ...req.body, photo, userId: req.user._id });
 
@@ -123,19 +94,7 @@ export const updateContactController = async (req, res) => {
 
 export const replaceContactController = async (req, res) => {
 
-    let photo = null;
-
-    if (UPLOAD_TO_CLOUDINARY) {
-        const result = await uploadToCloudinary(req.file.path);
-        await fs.unlink(req.file.path);
-        photo = result.secure_url;
-    } else {
-        await fs.rename(
-            req.file.path,
-            path.resolve('src/uploads/photo', req.file.filename),
-        );
-        photo = `${getEnvVar('APP_DOMAIN')}/photo/${req.file.filename}`;
-    }
+    const photo = await savePhoto(req);
 
     const replacedContact = await replaceContact(req.params.id, req.user._id, { ...req.body, photo, userId: req.user._id });
 

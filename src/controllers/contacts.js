@@ -108,7 +108,7 @@ export const updateContactController = async (req, res) => {
     }
 
 
-    const updatedContact = await updateContact(req.params.id, photo, req.body, req.user._id);
+    const updatedContact = await updateContact(req.params.id, req.user._id, { ...req.body, photo, userId: req.user._id });
 
     if (!updatedContact) {
         throw createHttpError(404, 'Contact not found');
@@ -123,9 +123,21 @@ export const updateContactController = async (req, res) => {
 
 export const replaceContactController = async (req, res) => {
 
+    let photo = null;
 
+    if (UPLOAD_TO_CLOUDINARY) {
+        const result = await uploadToCloudinary(req.file.path);
+        await fs.unlink(req.file.path);
+        photo = result.secure_url;
+    } else {
+        await fs.rename(
+            req.file.path,
+            path.resolve('src/uploads/photo', req.file.filename),
+        );
+        photo = `${getEnvVar('APP_DOMAIN')}/photo/${req.file.filename}`;
+    }
 
-    const replacedContact = await replaceContact(req.params.id, req.body, req.user._id);
+    const replacedContact = await replaceContact(req.params.id, req.user._id, { ...req.body, photo, userId: req.user._id });
 
     if (!replacedContact) {
         throw createHttpError(404, 'Contact not found');

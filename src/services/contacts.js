@@ -48,11 +48,11 @@ export function deleteContact(contactId, userId) {
     return Contacts.findOneAndDelete({ _id: contactId, userId });
 }
 
-export function updateContact(contactId, payload, userId) {
+export function updateContact(contactId, userId, payload) {
     return Contacts.findOneAndUpdate({ _id: contactId, userId }, payload, { new: true });
 }
 
-export async function replaceContact(contactId, payload, userId) {
+export async function replaceContact(contactId, userId, payload) {
     const result = await Contacts.findByIdAndUpdate({ _id: contactId, userId }, payload, {
         new: true,
         upsert: true,

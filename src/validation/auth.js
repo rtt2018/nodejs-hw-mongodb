@@ -50,3 +50,7 @@ export const requestPasswordResetSchema = Joi.object({
         'string.empty': 'Email is required',
     }),
 });
+
+export const loginWithGoogleOAuthSchema = Joi.object({
+    code: Joi.string().required(),
+});

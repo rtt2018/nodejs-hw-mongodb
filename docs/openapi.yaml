@@ -1,0 +1,22 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Contacts API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: This is a sample server Contacts server.
+tags:
+  # теги, що ви будете використовувати
+servers:
+  - url: http://localhost:4325
+  - url: https://nodejs-hw-mongodb-e3p5.onrender.com
+paths:
+  # тут будуть посилання на ендпоінти
+  # /contacts/{id}:
+  #   get: $ref: ../swagger/paths/contacts/{id}/get.yaml
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

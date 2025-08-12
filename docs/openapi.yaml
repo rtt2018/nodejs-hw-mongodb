@@ -7,14 +7,24 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: This is a sample server Contacts server.
 tags:
-  # теги, що ви будете використовувати
+  - name: Contacts
+    description: API for managing contacts
 servers:
   - url: http://localhost:4325
   - url: https://nodejs-hw-mongodb-e3p5.onrender.com
 paths:
-  # тут будуть посилання на ендпоінти
-  # /contacts/{id}:
-  #   get: $ref: ../swagger/paths/contacts/{id}/get.yaml
+  /contacts/{id}:
+    get:
+      $ref: '../swagger/paths/contacts/{id}/get.yaml'
+    patch:
+      $ref: '../swagger/paths/contacts/{id}/patch.yaml'
+    delete:
+      $ref: '../swagger/paths/contacts/{id}/delete.yaml'
+  /contacts:
+    get:
+      $ref: '../swagger/paths/contacts/get.yaml'
+    post:
+      $ref: '../swagger/paths/contacts/post.yaml'
 components:
   securitySchemes:
     bearerAuth:

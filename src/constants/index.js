@@ -21,3 +21,5 @@ export const CLOUDINARY = {
 };
 
 export const UPLOAD_TO_CLOUDINARY = getEnvVar('UPLOAD_TO_CLOUDINARY').toLowerCase() === 'true';
+
+export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');

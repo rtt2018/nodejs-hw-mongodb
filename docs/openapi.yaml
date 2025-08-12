@@ -10,8 +10,8 @@ tags:
   - name: Contacts
     description: API for managing contacts
 servers:
-  - url: http://localhost:4325
   - url: https://nodejs-hw-mongodb-e3p5.onrender.com
+  - url: http://localhost:4325
 paths:
   /contacts/{id}:
     get:

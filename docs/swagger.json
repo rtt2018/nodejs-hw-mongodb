@@ -11,10 +11,10 @@
   },
   "servers": [
     {
-      "url": "http://localhost:4325"
+      "url": "https://nodejs-hw-mongodb-e3p5.onrender.com"
     },
     {
-      "url": "https://nodejs-hw-mongodb-e3p5.onrender.com"
+      "url": "http://localhost:4325"
     }
   ],
   "tags": [

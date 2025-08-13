@@ -15,7 +15,7 @@ parameters:
 requestBody:
   required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
         type: object
         properties:
@@ -38,6 +38,9 @@ requestBody:
               - personal
           isFavourite:
             type: boolean
+          photo:
+            type: string
+            format: binary
         example:
           name: 'Jane Doe'
           phoneNumber: '+380501234567'

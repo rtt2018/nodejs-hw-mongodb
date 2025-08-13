@@ -42,9 +42,9 @@ requestBody:
             type: string
             format: binary
         example:
-          name: 'Jane Doe'
+          name: 'Karabas Barabas'
           phoneNumber: '+380501234567'
-          email: 'jane.doe@example.com'
+          email: 'klasnyj_pacyk@vsepuch.com'
           contactType: 'personal'
           isFavourite: true
 responses:

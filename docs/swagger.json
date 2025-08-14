@@ -109,7 +109,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -137,12 +137,16 @@
                   },
                   "isFavourite": {
                     "type": "boolean"
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 },
                 "example": {
-                  "name": "Jane Doe",
+                  "name": "Karabas Barabas",
                   "phoneNumber": "+380501234567",
-                  "email": "jane.doe@example.com",
+                  "email": "klasnyj_pacyk@vsepuch.com",
                   "contactType": "personal",
                   "isFavourite": true
                 }
@@ -499,7 +503,7 @@
           "name": {
             "description": "Contact's name",
             "type": "string",
-            "example": "John Doe"
+            "example": "Karabas Barabas"
           },
           "email": {
             "description": "Contact's email",
